@@ -129,7 +129,7 @@ mesh_color = area_grid.T
 
 fig, (ax1, ax2) = plt.subplots(2, figsize=(5, 8))
 fig.suptitle(
-    "A projectile motion simulator for FRC 2022. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
+    "A projectile motion simulator for FRC 2026. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
     wrap=True,
 )
 
