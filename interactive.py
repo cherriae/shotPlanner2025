@@ -127,7 +127,9 @@ for xi in range(x_range.size):
 X, Y = np.meshgrid(x_range, y_range)
 mesh_color = area_grid.T
 
-fig, (ax1, ax2) = plt.subplots(2, figsize=(5, 8))
+fig = plt.figure(figsize=(5, 8))
+ax1 = plt.subplot(2, 1, 1)
+ax2 = plt.subplot(2, 1, 2, projection="polar")
 fig.suptitle(
     "A projectile motion simulator for FRC 2026. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
     wrap=True,
@@ -181,15 +183,24 @@ def repaint_ax2():
     area, angles, lower_bound_pts, upper_bound_pts = get_ang_speed_space(
         shoot_state[0], shoot_state[2], doShow=False
     )
-    ax2.fill_between(angles, lower_bound_pts, upper_bound_pts, color="green")
-    ax2.set(xlabel="angle (degrees)", ylabel="speed (m/s)")
-    ax2.set_xlim([5, 85])
+    angles_rad = np.radians(angles)
+
+    ax2.fill_between(
+        angles_rad, lower_bound_pts, upper_bound_pts, color="green", alpha=0.5
+    )
     ax2.set_ylim([0, 15])
+    ax2.set_theta_zero_location("E")
+    ax2.set_theta_direction(1)
+    ax2.set_thetamin(5)
+    ax2.set_thetamax(85)
     ax2.set_title("Drag dot to change shoot angle and speed")
+    ax2.grid(True)
 
     vx = shoot_state[1]
     vy = shoot_state[3]
-    ax2.scatter(degrees(arctan2(vy, vx)), (vx**2 + vy**2) ** 0.5, c="black")
+    angle_rad = arctan2(vy, vx)
+    speed = (vx**2 + vy**2) ** 0.5
+    ax2.scatter(angle_rad, speed, c="black", s=100, zorder=5)
 
 
 def onHover(event):
@@ -207,7 +218,7 @@ def onHover(event):
 
         if event.inaxes is ax2:
 
-            angle = radians(ix)
+            angle = ix  # ix is already in radians for polar plot
             speed = iy
 
             shoot_state[1] = speed * cos(angle)
