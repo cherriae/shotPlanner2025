@@ -8,7 +8,7 @@ from scipy.optimize import fsolve
 g = 9.81
 rim_width = 1.04  # 42 inches
 rim_height = 1.83  # 72 inches
-cargo_radius = 0.15 / 2  # radius of ball in inches
+cargo_radius = 0.15 / 2  # radius of ball in meters
 drag_coeff = (
     0.23  # https://www.chiefdelphi.com/t/galactech-4926-build-blog-2022/398705/5
 )
