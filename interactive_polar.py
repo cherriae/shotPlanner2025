@@ -9,13 +9,6 @@ g = 9.81
 rim_width = 1.04  # 42 inches
 rim_height = 1.83  # 72 inches
 cargo_radius = 0.15 / 2  # radius of ball in meters
-drag_coeff = 0.47  # https://www.chiefdelphi.com/t/frc-rebuilt-trajectory-calculator-desmos-3d/511353
-# drag_coeff = 0.50 #https://www.chiefdelphi.com/t/galactech-4926-build-blog-2022/398705/5
-cargo_mass = 0.21  # mass in Kg
-air_density = 1.225
-
-
-cargo_area = pi * cargo_radius**2
 
 
 def get_speed_func(startpt, endpt):
@@ -70,21 +63,9 @@ def get_ang_speed_space(xpos, ypos, doShow=False):
 def flight_model(t, s):
     x, vx, y, vy = s
     dx = vx
+    dvx = 0
     dy = vy
-
-    v_squared = vx**2 + vy**2
-    v = sqrt(v_squared)
-
-    sin_component = vy / v
-    cos_component = vx / v
-
-    Fd = 0.5 * air_density * cargo_area * drag_coeff * v_squared
-
-    Fx = -Fd * cos_component
-    Fy = -Fd * sin_component - cargo_mass * g
-
-    dvx = Fx / cargo_mass
-    dvy = Fy / cargo_mass
+    dvy = -9.8
     return [dx, dvx, dy, dvy]
 
 
@@ -118,11 +99,7 @@ passed_rim.terminal = True
 def try_shot(s0):
     t_span = (0, 5.0)
     solution = solve_ivp(
-        flight_model,
-        t_span,
-        s0,
-        events=[hit_ground, hit_rim, passed_rim],
-        max_step=0.05,
+        flight_model, t_span, s0, events=[hit_ground, hit_rim, passed_rim], max_step=0.2
     )
 
     result = 0  # default is success
@@ -154,7 +131,7 @@ fig = plt.figure(figsize=(5, 8))
 ax1 = plt.subplot(2, 1, 1)
 ax2 = plt.subplot(2, 1, 2, projection="polar")
 fig.suptitle(
-    "A projectile motion simulator for FRC 2026. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
+    "A projectile motion simulator for FRC 2022. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
     wrap=True,
 )
 
@@ -211,10 +188,10 @@ def repaint_ax2():
     ax2.fill_between(
         angles_rad, lower_bound_pts, upper_bound_pts, color="green", alpha=0.5
     )
-    ax2.set_ylim([5, 15])
+    ax2.set_ylim([0, 15])
     ax2.set_theta_zero_location("E")
     ax2.set_theta_direction(1)
-    ax2.set_thetamin(20)
+    ax2.set_thetamin(5)
     ax2.set_thetamax(85)
     ax2.set_title("Drag dot to change shoot angle and speed")
     ax2.grid(True)

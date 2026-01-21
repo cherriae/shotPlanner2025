@@ -9,11 +9,10 @@ g = 9.81
 rim_width = 1.04  # 42 inches
 rim_height = 1.83  # 72 inches
 cargo_radius = 0.15 / 2  # radius of ball in meters
+# drag_coeff = 0.23 #https://www.chiefdelphi.com/t/galactech-4926-build-blog-2022/398705/5
 drag_coeff = 0.47  # https://www.chiefdelphi.com/t/frc-rebuilt-trajectory-calculator-desmos-3d/511353
-# drag_coeff = 0.50 #https://www.chiefdelphi.com/t/galactech-4926-build-blog-2022/398705/5
 cargo_mass = 0.21  # mass in Kg
 air_density = 1.225
-
 
 cargo_area = pi * cargo_radius**2
 
@@ -154,7 +153,7 @@ fig = plt.figure(figsize=(5, 8))
 ax1 = plt.subplot(2, 1, 1)
 ax2 = plt.subplot(2, 1, 2, projection="polar")
 fig.suptitle(
-    "A projectile motion simulator for FRC 2026. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
+    "A projectile motion simulator for FRC 2022. \n The color gradient shows the size of the allowable error (pitch*yaw*speed) in making the shot",
     wrap=True,
 )
 
